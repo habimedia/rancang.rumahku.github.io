@@ -69,7 +69,32 @@ footer{padding:28px 32px;background:#0b1c32;color:#c5cdd8;font-size:10px}.footer
 .property-empty{padding:22px;border:1px dashed #aab4c1;border-radius:12px;color:#536174;grid-column:1/-1}
 .price-sim{margin-top:26px;padding:26px;background:#102746;color:#f2f0ea;border-radius:18px}.sim-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-top:18px}.sim-grid input{box-sizing:border-box}.sim-result{margin-top:20px;padding:18px;background:#ffffff12;border:1px solid #c6a15b66;border-radius:13px}.sim-result strong{display:block;font-size:clamp(25px,4vw,38px);color:#e3c17f;margin-top:5px}.sim-note{font-size:12px;color:#c5cdd8;margin-top:10px}
 @media(max-width:850px){.property-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.property-tools{grid-template-columns:1fr 1fr}.sim-grid{grid-template-columns:1fr 1fr}}
-@media(max-width:560px){.property-grid,.property-tools,.sim-grid{grid-template-columns:1fr}.price-menu{left:auto;right:0}.property-card img{height:210px}}
+/* Admin property form, multiple photo upload and gallery */
+.admin-property-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 12px}
+.admin-property-form .full{grid-column:1/-1;min-width:0}
+.admin-property-form select{display:block;width:100%;margin-top:6px;padding:11px 12px;border:1px solid #d5deea;border-radius:8px;font:13px Arial;color:#172033;background:#fff}
+.admin-photo-help{font:11px/1.6 Arial;color:#65748a;margin:4px 0 12px}
+.photo-preview-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+.photo-preview-item{position:relative;aspect-ratio:1;overflow:hidden;border-radius:9px;background:#e9eef5}
+.photo-preview-item img{width:100%;height:100%;object-fit:cover;display:block}
+.photo-preview-item button{position:absolute;top:4px;right:4px;border:0;border-radius:50%;width:25px;height:25px;background:#b42318;color:#fff;font-weight:800;cursor:pointer}
+.admin-property-form-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:8px}
+.admin-property-list-wrap{border-top:1px solid #e4e9f0;margin-top:20px;padding-top:16px}
+.admin-property-list{display:grid;gap:9px}
+.admin-property-row{display:flex;align-items:center;gap:11px;padding:9px;border:1px solid #e1e7f0;border-radius:10px;background:#f8fafc;min-width:0}
+.admin-property-row>img{width:66px;height:58px;object-fit:cover;border-radius:7px;background:#e9eef5;flex:0 0 auto}
+.admin-property-row-info{min-width:0;flex:1;color:#26384f;font:12px/1.5 Arial}
+.admin-property-row-info strong{display:block;overflow-wrap:anywhere}
+.admin-property-row-actions{display:flex;gap:6px;flex-wrap:wrap}
+.admin-property-row-actions button{border:0;border-radius:7px;padding:8px 10px;font-size:11px;font-weight:700;cursor:pointer;background:#e6edf6;color:#17385e}
+.admin-property-row-actions button[data-delete-index]{background:#fee4e2;color:#a12a22}
+.property-card-description{font-size:12px;line-height:1.6;color:#536174;margin:10px 0 0;white-space:pre-line}
+.property-thumbs{display:flex;gap:6px;padding:8px 12px 0;overflow-x:auto}
+.property-thumb{width:48px;height:42px;flex:0 0 auto;border:2px solid transparent;border-radius:6px;padding:0;overflow:hidden;background:#e9eef5;cursor:pointer}
+.property-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.property-thumb:focus,.property-thumb:hover{border-color:#0878ed}
+.property-card .property-main-image{width:100%;height:190px;object-fit:cover;display:block}
+@media(max-width:650px){.admin-property-form{grid-template-columns:1fr}.admin-property-form .full{grid-column:1}.photo-preview-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.admin-property-row{align-items:flex-start;flex-wrap:wrap}.admin-property-row-info{min-width:calc(100% - 85px)}.admin-property-row-actions{width:100%;padding-left:77px}}
 </style>
 
 </head>
@@ -205,11 +230,36 @@ footer{padding:28px 32px;background:#0b1c32;color:#c5cdd8;font-size:10px}.footer
         <label class="admin-field">Judul proyek pilihan<input id="editFeaturedTitle" type="text"></label>
         <label class="admin-field">Deskripsi proyek pilihan<textarea id="editFeaturedDescription"></textarea></label>
       </div>
-      <div class="admin-card">
-        <h3>Data Property</h3>
-        <p style="font-size:12px;color:#697586">Edit daftar dalam format JSON. Isi status dengan "baru" atau "terjual". Harga, luas tanah, luas bangunan, dan lokasi akan tampil di kartu properti.</p>
-        <label class="admin-field">Daftar property (JSON)<textarea id="editPropertyData" class="json-field" rows="14" spellcheck="false"></textarea></label>
-      </div>
+      <div class="admin-card" style="grid-column:1/-1">
+  <h3 id="propertyFormTitle">Tambah Properti Baru</h3>
+  <p style="font-size:12px;color:#697586;line-height:1.6">Isi informasi rumah dan pilih hingga 20 foto sekaligus dari galeri HP. Ukuran file asli maksimal 25 MB per foto; foto hanya dikompres ringan agar detail tetap tajam.</p>
+  <div class="admin-property-form">
+    <label class="admin-field">Nama / judul rumah<input id="propertyName" type="text" maxlength="100" placeholder="Contoh: Rumah Minimalis Cawas"></label>
+    <label class="admin-field">Harga rumah (Rp)<input id="propertyPrice" type="text" inputmode="numeric" placeholder="Contoh: 450000000"></label>
+    <label class="admin-field">Status properti<select id="propertyStatus"><option value="baru">Tersedia</option><option value="terjual">Terjual</option></select></label>
+    <label class="admin-field">Lokasi / alamat<input id="propertyLocation" type="text" maxlength="180" placeholder="Contoh: Cawas, Klaten"></label>
+    <label class="admin-field full">Deskripsi / keterangan rumah<textarea id="propertyDescription" rows="3" placeholder="Jelaskan kondisi rumah, akses jalan, lingkungan, dan informasi penting lainnya"></textarea></label>
+    <label class="admin-field">Luas tanah (m²)<input id="propertyLand" type="number" min="0" step="1" placeholder="Contoh: 90"></label>
+    <label class="admin-field">Luas bangunan (m²)<input id="propertyBuilding" type="number" min="0" step="1" placeholder="Contoh: 60"></label>
+    <label class="admin-field">Kamar tidur<input id="propertyBedrooms" type="number" min="0" step="1" placeholder="Contoh: 3"></label>
+    <label class="admin-field">Kamar mandi<input id="propertyBathrooms" type="number" min="0" step="1" placeholder="Contoh: 2"></label>
+    <label class="admin-field">Jumlah lantai<input id="propertyFloors" type="number" min="0" step="1" placeholder="Contoh: 1"></label>
+    <label class="admin-field full">Fasilitas / informasi tambahan<textarea id="propertyFacilities" rows="2" placeholder="Contoh: Carport, listrik 1.300 watt, air sumur, dekat sekolah"></textarea></label>
+    <div class="full">
+      <label class="admin-field">Foto rumah (maksimal 20 foto)<input id="propertyPhotos" type="file" accept="image/*" multiple></label>
+      <p class="admin-photo-help">Pilih hingga 20 foto sekaligus (maksimal 25 MB per foto). Foto pertama menjadi foto utama. Kamu bisa menghapus foto dari pratinjau sebelum menyimpan. Foto disimpan di penyimpanan browser (IndexedDB), bukan diperkecil menjadi thumbnail.</p>
+      <div id="propertyPhotoPreview" class="photo-preview-grid"></div>
+    </div>
+    <div class="full admin-property-form-actions">
+      <button class="admin-save" id="propertySubmitBtn" type="button">Simpan properti</button>
+      <button class="admin-reset" id="propertyCancelBtn" type="button" hidden>Batal edit</button>
+    </div>
+  </div>
+  <div class="admin-property-list-wrap">
+    <h3>Daftar properti tersimpan</h3>
+    <div id="adminPropertyList" class="admin-property-list"></div>
+  </div>
+</div>
       <div class="admin-card">
         <h3>Pengaturan Simulasi Cicilan</h3>
         <label class="admin-field">Harga awal simulasi (Rp)<input id="editSimPrice" type="text" inputmode="numeric" autocomplete="off"></label>
@@ -234,7 +284,7 @@ footer{padding:28px 32px;background:#0b1c32;color:#c5cdd8;font-size:10px}.footer
         <button class="admin-save" id="adminSave" type="button">Simpan perubahan</button>
         <button class="admin-reset" id="adminReset" type="button">Reset ke versi awal</button>
       </div>
-      <p class="admin-note">Catatan: versi ini menyimpan perubahan di browser/perangkat ini (localStorage). Untuk admin sungguhan yang aman, login terlindungi, dan perubahan tampil untuk semua pengunjung/perangkat, website perlu dihubungkan ke backend/database dan hosting. Jangan gunakan panel statis ini untuk menyimpan data rahasia.</p>
+      <p class="admin-note">Catatan: pengaturan dan data properti versi ini masih tersimpan di browser/perangkat ini. Foto properti disimpan di IndexedDB agar dapat menampung file lebih besar. Agar foto dan perubahan tampil untuk semua pengunjung/perangkat, website tetap perlu dihubungkan ke Supabase Storage dan database. Login admin statis juga belum aman untuk penggunaan publik.</p> Untuk admin sungguhan yang aman, login terlindungi, dan perubahan tampil untuk semua pengunjung/perangkat, website perlu dihubungkan ke backend/database dan hosting. Jangan gunakan panel statis ini untuk menyimpan data rahasia.</p>
     </div>
   </section>
 </div>
@@ -441,10 +491,232 @@ footer{padding:28px 32px;background:#0b1c32;color:#c5cdd8;font-size:10px}.footer
   }
 
   const safe=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  function card(p){
-    return `<article class="property-card"><img src="${safe(p.image||'')}" alt="${safe(p.name)}" onerror="this.style.display='none'"><div class="property-body"><div class="property-status">${p.status==='terjual'?'TERJUAL':'TERSEDIA'}</div><h3>${safe(p.name)}</h3><div class="property-price">${rupiah(p.price)}</div><div class="property-meta"><span>Luas tanah ${safe(p.land)} m²</span><span>Luas bangunan ${safe(p.building)} m²</span></div><div class="property-location">⌖ ${safe(p.location)}</div></div></article>`;
+    let propertyPhotos=[];
+  let editingPropertyIndex=-1;
+  const PHOTO_DB_NAME='rancangRumahKuPhotoDB';
+  const PHOTO_STORE_NAME='photos';
+  let photoDbPromise=null;
+  const photoUrlCache=new Map();
+  const MAX_PHOTOS=20;
+  const MAX_PHOTO_SIZE=25*1024*1024;
+
+  function openPhotoDB(){
+    if(!('indexedDB' in window))return Promise.reject(new Error('Browser ini tidak mendukung penyimpanan foto besar.'));
+    if(photoDbPromise)return photoDbPromise;
+    photoDbPromise=new Promise((resolve,reject)=>{
+      const request=indexedDB.open(PHOTO_DB_NAME,1);
+      request.onupgradeneeded=()=>{
+        const db=request.result;
+        if(!db.objectStoreNames.contains(PHOTO_STORE_NAME))db.createObjectStore(PHOTO_STORE_NAME);
+      };
+      request.onsuccess=()=>resolve(request.result);
+      request.onerror=()=>reject(request.error||new Error('Penyimpanan foto tidak dapat dibuka.'));
+    });
+    return photoDbPromise;
   }
-  function renderProperties(){
+
+  async function storePhotoBlob(blob){
+    const db=await openPhotoDB();
+    const key=`photo-${Date.now()}-${Math.random().toString(36).slice(2,10)}`;
+    await new Promise((resolve,reject)=>{
+      const tx=db.transaction(PHOTO_STORE_NAME,'readwrite');
+      tx.objectStore(PHOTO_STORE_NAME).put(blob,key);
+      tx.oncomplete=resolve;
+      tx.onerror=()=>reject(tx.error||new Error('Foto gagal disimpan.'));
+      tx.onabort=()=>reject(tx.error||new Error('Penyimpanan foto dibatalkan.'));
+    });
+    return `idb:${key}`;
+  }
+
+  async function getPhotoUrl(ref){
+    if(!ref)return '';
+    if(!String(ref).startsWith('idb:'))return ref;
+    if(photoUrlCache.has(ref))return photoUrlCache.get(ref);
+    const db=await openPhotoDB();
+    const blob=await new Promise((resolve,reject)=>{
+      const tx=db.transaction(PHOTO_STORE_NAME,'readonly');
+      const request=tx.objectStore(PHOTO_STORE_NAME).get(String(ref).slice(4));
+      request.onsuccess=()=>resolve(request.result||null);
+      request.onerror=()=>reject(request.error||new Error('Foto tidak dapat dibaca.'));
+    });
+    if(!blob)return '';
+    const url=URL.createObjectURL(blob);
+    photoUrlCache.set(ref,url);
+    return url;
+  }
+
+  async function cleanupUnusedPhotos(){
+    try{
+      const used=new Set(cfg.properties.flatMap(getPropertyPhotos).filter(x=>String(x).startsWith('idb:')).map(x=>String(x).slice(4)));
+      const db=await openPhotoDB();
+      await new Promise((resolve,reject)=>{
+        const tx=db.transaction(PHOTO_STORE_NAME,'readwrite');
+        const store=tx.objectStore(PHOTO_STORE_NAME);
+        const request=store.getAllKeys();
+        request.onsuccess=()=>request.result.forEach(key=>{if(!used.has(String(key)))store.delete(key);});
+        request.onerror=()=>reject(request.error);
+        tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error);
+      });
+      for(const [ref,url] of photoUrlCache){
+        if(!used.has(ref.slice(4))){URL.revokeObjectURL(url);photoUrlCache.delete(ref);}
+      }
+    }catch(error){console.warn('Pembersihan foto lama dilewati:',error);}
+  }
+
+  function getPropertyPhotos(p){
+    const photos=Array.isArray(p.images)?p.images.filter(Boolean):[];
+    return photos.length?photos:(p.image?[p.image]:[]);
+  }
+
+  async function migrateLegacyPhotos(){
+    let changed=false;
+    for(const property of cfg.properties){
+      const oldPhotos=getPropertyPhotos(property);
+      const nextPhotos=[];
+      for(const photo of oldPhotos){
+        if(typeof photo==='string'&&photo.startsWith('data:image/')){
+          try{const blob=await (await fetch(photo)).blob();nextPhotos.push(await storePhotoBlob(blob));changed=true;}
+          catch(error){nextPhotos.push(photo);console.warn('Migrasi foto lama gagal:',error);}
+        }else nextPhotos.push(photo);
+      }
+      if(changed){property.images=nextPhotos;if(nextPhotos[0])property.image=nextPhotos[0];}
+    }
+    if(changed){
+      try{localStorage.setItem(featureKey,JSON.stringify(cfg));}
+      catch(error){alert('Foto lama sudah dipindahkan sebagian, tetapi data properti belum dapat diperbarui. Silakan cek kembali foto pada daftar properti.');}
+    }
+  }
+
+  async function card(p){
+    const photos=await Promise.all(getPropertyPhotos(p).map(getPhotoUrl));
+    const mainPhoto=photos.find(Boolean)||'';
+    const thumbs=photos.filter(Boolean).length>1?`<div class="property-thumbs">${photos.filter(Boolean).slice(0,MAX_PHOTOS).map(src=>`<button class="property-thumb" type="button" data-photo-src="${safe(src)}" aria-label="Lihat foto lain"><img src="${safe(src)}" alt="Foto ${safe(p.name)}"></button>`).join('')}</div>`:'';
+    const details=[p.bedrooms?`${safe(p.bedrooms)} kamar tidur`:'',p.bathrooms?`${safe(p.bathrooms)} kamar mandi`:'',p.floors?`${safe(p.floors)} lantai`:'' ].filter(Boolean);
+    return `<article class="property-card"><img class="property-main-image" src="${safe(mainPhoto)}" alt="${safe(p.name)}" onerror="this.style.display='none'">${thumbs}<div class="property-body"><div class="property-status">${p.status==='terjual'?'TERJUAL':'TERSEDIA'}</div><h3>${safe(p.name)}</h3><div class="property-price">${rupiah(p.price)}</div><div class="property-meta"><span>Luas tanah ${safe(p.land||0)} m²</span><span>Luas bangunan ${safe(p.building||0)} m²</span>${details.map(d=>`<span>${d}</span>`).join('')}</div><div class="property-location">⌖ ${safe(p.location||'')}</div>${p.description?`<p class="property-card-description">${safe(p.description)}</p>`:''}${p.facilities?`<p class="property-card-description"><strong>Fasilitas:</strong> ${safe(p.facilities)}</p>`:''}</div></article>`;
+  }
+
+  function attachGalleryEvents(){
+    document.querySelectorAll('.property-thumb').forEach(button=>button.addEventListener('click',()=>{
+      const parent=button.closest('.property-card');
+      const main=parent&&parent.querySelector('.property-main-image');
+      if(main)main.src=button.dataset.photoSrc;
+    }));
+  }
+
+  async function renderProperties(){
+    const min=digits($('filterMin').value)||0,max=$('filterMax').value.trim()?digits($('filterMax').value):Infinity,loc=$('filterLocation').value.trim().toLowerCase();
+    const fresh=cfg.properties.filter(p=>p.status==='baru'&&Number(p.price)>=min&&Number(p.price)<=max&&String(p.location||'').toLowerCase().includes(loc));
+    const sold=cfg.properties.filter(p=>p.status==='terjual');
+    const [freshCards,soldCards]=await Promise.all([Promise.all(fresh.map(card)),Promise.all(sold.map(card))]);
+    $('newPropertyGrid').innerHTML=freshCards.length?freshCards.join(''):'<div class="property-empty">Belum ada property yang sesuai dengan filter harga atau lokasi.</div>';
+    $('soldPropertyGrid').innerHTML=soldCards.length?soldCards.join(''):'<div class="property-empty">Belum ada data property terjual.</div>';
+    attachGalleryEvents();
+  }
+
+  function compressPhoto(file){
+    return new Promise((resolve,reject)=>{
+      if(!file.type.startsWith('image/')){reject(new Error('File bukan gambar.'));return;}
+      if(file.size>MAX_PHOTO_SIZE){reject(new Error('Ukuran foto maksimal 25 MB per file sebelum diproses.'));return;}
+      const reader=new FileReader();
+      reader.onerror=()=>reject(new Error('Foto gagal dibaca.'));
+      reader.onload=()=>{
+        const img=new Image();
+        img.onerror=()=>reject(new Error('Foto tidak bisa diproses.'));
+        img.onload=()=>{
+          const maxSide=2560,scale=Math.min(1,maxSide/Math.max(img.width,img.height));
+          const canvas=document.createElement('canvas');
+          canvas.width=Math.max(1,Math.round(img.width*scale));
+          canvas.height=Math.max(1,Math.round(img.height*scale));
+          const context=canvas.getContext('2d');
+          context.drawImage(img,0,0,canvas.width,canvas.height);
+          canvas.toBlob(blob=>blob?resolve(blob):reject(new Error('Foto gagal diproses menjadi gambar.')),'image/jpeg',0.9);
+        };
+        img.src=reader.result;
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  async function renderPhotoPreviews(){
+    const previews=await Promise.all(propertyPhotos.map(async(ref,i)=>({src:await getPhotoUrl(ref),index:i})));
+    $('propertyPhotoPreview').innerHTML=previews.map(item=>`<div class="photo-preview-item"><img src="${safe(item.src)}" alt="Pratinjau foto ${item.index+1}"><button type="button" data-remove-photo="${item.index}" aria-label="Hapus foto">×</button></div>`).join('');
+    $('propertyPhotoPreview').querySelectorAll('[data-remove-photo]').forEach(button=>button.addEventListener('click',()=>{
+      propertyPhotos.splice(Number(button.dataset.removePhoto),1);renderPhotoPreviews();
+    }));
+  }
+
+  function resetPropertyForm(){
+    editingPropertyIndex=-1;propertyPhotos=[];
+    ['propertyName','propertyPrice','propertyLocation','propertyDescription','propertyLand','propertyBuilding','propertyBedrooms','propertyBathrooms','propertyFloors','propertyFacilities'].forEach(id=>$(id).value='');
+    $('propertyStatus').value='baru';$('propertyPhotos').value='';
+    $('propertyFormTitle').textContent='Tambah Properti Baru';$('propertySubmitBtn').textContent='Simpan properti';$('propertyCancelBtn').hidden=true;
+    renderPhotoPreviews();
+  }
+
+  async function renderAdminPropertyList(){
+    const rows=await Promise.all(cfg.properties.map(async(p,i)=>{
+      const photo=await getPhotoUrl(getPropertyPhotos(p)[0]||'');
+      return `<div class="admin-property-row"><img src="${safe(photo)}" alt=""><div class="admin-property-row-info"><strong>${safe(p.name)}</strong>${safe(p.location||'Lokasi belum diisi')} · ${rupiah(p.price)} · ${p.status==='terjual'?'Terjual':'Tersedia'}</div><div class="admin-property-row-actions"><button type="button" data-edit-index="${i}">Edit</button><button type="button" data-delete-index="${i}">Hapus</button></div></div>`;
+    }));
+    $('adminPropertyList').innerHTML=rows.length?rows.join(''):'<p style="font:12px Arial;color:#65748a">Belum ada properti.</p>';
+    $('adminPropertyList').querySelectorAll('[data-edit-index]').forEach(button=>button.addEventListener('click',()=>editProperty(Number(button.dataset.editIndex))));
+    $('adminPropertyList').querySelectorAll('[data-delete-index]').forEach(button=>button.addEventListener('click',()=>deleteProperty(Number(button.dataset.deleteIndex))));
+  }
+
+  async function editProperty(index){
+    const p=cfg.properties[index];if(!p)return;
+    editingPropertyIndex=index;propertyPhotos=getPropertyPhotos(p).slice(0,MAX_PHOTOS);
+    $('propertyName').value=p.name||'';$('propertyPrice').value=formatMoney(p.price);
+    $('propertyStatus').value=p.status||'baru';$('propertyLocation').value=p.location||'';
+    $('propertyDescription').value=p.description||'';$('propertyLand').value=p.land??'';$('propertyBuilding').value=p.building??'';
+    $('propertyBedrooms').value=p.bedrooms??'';$('propertyBathrooms').value=p.bathrooms??'';$('propertyFloors').value=p.floors??'';$('propertyFacilities').value=p.facilities||'';
+    $('propertyFormTitle').textContent='Edit Properti';$('propertySubmitBtn').textContent='Simpan perubahan properti';$('propertyCancelBtn').hidden=false;
+    await renderPhotoPreviews();$('propertyFormTitle').scrollIntoView({behavior:'smooth',block:'center'});
+  }
+
+  function persistProperties(nextProperties){
+    const nextCfg={...cfg,properties:nextProperties};
+    try{localStorage.setItem(featureKey,JSON.stringify(nextCfg));cfg=nextCfg;renderProperties();renderAdminPropertyList();cleanupUnusedPhotos();return true;}
+    catch(error){alert('Data properti belum tersimpan. Penyimpanan data browser penuh atau dibatasi. Foto disimpan terpisah di IndexedDB, tetapi data teks properti tetap membutuhkan ruang browser.');return false;}
+  }
+
+  function deleteProperty(index){
+    const p=cfg.properties[index];if(!p||!confirm(`Hapus properti "${p.name}"?`))return;
+    const next=cfg.properties.slice();next.splice(index,1);
+    if(persistProperties(next)){if(editingPropertyIndex===index)resetPropertyForm();else if(editingPropertyIndex>index)editingPropertyIndex--;alert('Properti berhasil dihapus dari penyimpanan browser ini.');}
+  }
+
+  $('propertyPhotos').addEventListener('change',async e=>{
+    const files=Array.from(e.target.files||[]);if(!files.length)return;
+    const available=MAX_PHOTOS-propertyPhotos.length;
+    if(files.length>available){alert(`Maksimal ${MAX_PHOTOS} foto untuk setiap properti. Slot yang tersisa: ${available}.`);e.target.value='';return;}
+    for(const file of files){
+      try{
+        const blob=await compressPhoto(file);
+        propertyPhotos.push(await storePhotoBlob(blob));
+      }catch(error){alert(error.message||'Ada foto yang gagal disimpan. Periksa ruang penyimpanan browser.');}
+    }
+    e.target.value='';await renderPhotoPreviews();
+  });
+
+  $('propertySubmitBtn').addEventListener('click',()=>{
+    const name=$('propertyName').value.trim(),price=digits($('propertyPrice').value),location=$('propertyLocation').value.trim();
+    if(!name){alert('Nama rumah wajib diisi.');return;}
+    if(!price){alert('Harga rumah wajib diisi dengan angka lebih dari 0.');return;}
+    if(!location){alert('Lokasi rumah wajib diisi.');return;}
+    if(!propertyPhotos.length){alert('Pilih minimal satu foto rumah.');return;}
+    const previous=editingPropertyIndex>=0?cfg.properties[editingPropertyIndex]:{};
+    const property={...previous,id:previous.id||`property-${Date.now()}`,name,status:$('propertyStatus').value,price,
+      land:Number($('propertyLand').value)||0,building:Number($('propertyBuilding').value)||0,location,
+      description:$('propertyDescription').value.trim(),bedrooms:Number($('propertyBedrooms').value)||0,
+      bathrooms:Number($('propertyBathrooms').value)||0,floors:Number($('propertyFloors').value)||0,
+      facilities:$('propertyFacilities').value.trim(),images:propertyPhotos.slice(),image:propertyPhotos[0]};
+    const next=cfg.properties.slice();
+    if(editingPropertyIndex>=0)next[editingPropertyIndex]=property;else next.push(property);
+    if(persistProperties(next)){resetPropertyForm();alert('Data properti dan foto tersimpan di browser/perangkat ini. Untuk menampilkannya ke semua pengunjung, lanjutkan integrasi Supabase Storage.');}
+  });
+
+  $('propertyCancelBtn').addEventListener('click',resetPropertyForm);{
     const min=digits($('filterMin').value)||0,max=$('filterMax').value.trim()?digits($('filterMax').value):Infinity,loc=$('filterLocation').value.trim().toLowerCase();
     const fresh=cfg.properties.filter(p=>p.status==='baru'&&Number(p.price)>=min&&Number(p.price)<=max&&String(p.location).toLowerCase().includes(loc));
     const sold=cfg.properties.filter(p=>p.status==='terjual');
@@ -464,26 +736,50 @@ footer{padding:28px 32px;background:#0b1c32;color:#c5cdd8;font-size:10px}.footer
   ['filterMin','filterMax','filterLocation'].forEach(id=>$(id).addEventListener('input',renderProperties));
   ['simPrice','simDp'].forEach(id=>bindMoneyInput($(id)));
   ['simPrice','simDp','simRate','simYears'].forEach(id=>$(id).addEventListener('input',calculate));
-  // Extend the existing admin editor without changing its original controls.
-  const originalFill=window.fillForm;
+    // Isi daftar properti dan pengaturan simulasi saat admin membuka dashboard.
   const adminLaunch=$('adminLaunch');
   adminLaunch.addEventListener('click',()=>{
-    $('editPropertyData').value=JSON.stringify(cfg.properties,null,2);
-    $('editSimPrice').value=formatMoney(cfg.simPrice);$('editSimDp').value=formatMoney(cfg.simDp);$('editSimRate').value=cfg.simRate;$('editSimYears').value=cfg.simYears;
+    $('editSimPrice').value=formatMoney(cfg.simPrice);
+    $('editSimDp').value=formatMoney(cfg.simDp);
+    $('editSimRate').value=cfg.simRate;
+    $('editSimYears').value=cfg.simYears;
+    renderAdminPropertyList();
+    resetPropertyForm();
   });
+
   $('adminSave').addEventListener('click',()=>{
     try{
-      const properties=JSON.parse($('editPropertyData').value);
-      if(!Array.isArray(properties))throw new Error('Data property harus berupa array JSON.');
-      properties.forEach((p,i)=>{
-        if(!p.name||!['baru','terjual'].includes(p.status)||!Number.isFinite(Number(p.price)))throw new Error('Periksa data property nomor '+(i+1)+'. Pastikan name, status (baru/terjual), dan price terisi.');
-      });
-      cfg={properties,simPrice:digits($('editSimPrice').value)||defaults.simPrice,simDp:digits($('editSimDp').value)||0,simRate:Number($('editSimRate').value)||0,simYears:Number($('editSimYears').value)||defaults.simYears};
-      localStorage.setItem(featureKey,JSON.stringify(cfg));renderProperties();setSimulator();
-    }catch(e){alert('Pengaturan property belum tersimpan: '+e.message);}
+      const nextCfg={
+        ...cfg,
+        simPrice:digits($('editSimPrice').value)||defaults.simPrice,
+        simDp:digits($('editSimDp').value)||0,
+        simRate:Number($('editSimRate').value)||0,
+        simYears:Number($('editSimYears').value)||defaults.simYears
+      };
+      localStorage.setItem(featureKey,JSON.stringify(nextCfg));
+      cfg=nextCfg;
+      renderProperties();
+      setSimulator();
+    }catch(e){
+      alert('Pengaturan simulasi belum tersimpan. Penyimpanan browser mungkin penuh.');
+    }
   });
-  $('adminReset').addEventListener('click',()=>{cfg={...defaults};localStorage.removeItem(featureKey);renderProperties();setSimulator();});
-  renderProperties();setSimulator();
+
+  $('adminReset').addEventListener('click',()=>{
+    cfg={...defaults};
+    localStorage.removeItem(featureKey);
+    renderProperties();
+    setSimulator();
+    renderAdminPropertyList();
+    resetPropertyForm();
+  });
+
+  (async()=>{
+    await migrateLegacyPhotos();
+    await renderProperties();
+    await renderAdminPropertyList();
+    setSimulator();
+  })();  renderProperties();setSimulator();
 })();
 </script>
 
