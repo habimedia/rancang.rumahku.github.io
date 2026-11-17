@@ -393,7 +393,14 @@ footer{padding:28px 32px;background:#0b1c32;color:#c5cdd8;font-size:10px}.footer
         <button class="admin-save" id="adminSave" type="button">Simpan perubahan</button>
         <button class="admin-reset" id="adminReset" type="button">Reset ke versi awal</button>
       </div>
-      <p class="admin-note">Catatan: pengaturan dan data properti versi ini masih tersimpan di browser/perangkat ini. Foto properti disimpan di IndexedDB agar dapat menampung file lebih besar. Agar foto dan perubahan tampil untuk semua pengunjung/perangkat, website tetap perlu dihubungkan ke Supabase Storage dan database. Login admin statis juga belum aman untuk penggunaan publik.</p> Untuk admin sungguhan yang aman, login terlindungi, dan perubahan tampil untuk semua pengunjung/perangkat, website perlu dihubungkan ke backend/database dan hosting. Jangan gunakan panel statis ini untuk menyimpan data rahasia.</p>
+      <p class="admin-note">
+  Catatan: pengaturan dan data properti versi ini masih tersimpan di browser/perangkat ini.
+  Foto properti disimpan di IndexedDB agar dapat menampung file lebih besar.
+  Agar foto dan perubahan tampil untuk semua pengunjung/perangkat, website perlu dihubungkan
+  ke Supabase Storage dan database. Login admin statis juga belum aman untuk penggunaan publik.
+  Untuk admin sungguhan yang aman, gunakan autentikasi backend, database, dan penyimpanan cloud.
+  Jangan gunakan panel statis ini untuk menyimpan data rahasia.
+      </p>
     </div>
   </section>
 </div>
@@ -1063,12 +1070,6 @@ footer{padding:28px 32px;background:#0b1c32;color:#c5cdd8;font-size:10px}.footer
   });
 
   $('propertyCancelBtn').addEventListener('click',resetPropertyForm);
-    const min=digits($('filterMin').value)||0,max=$('filterMax').value.trim()?digits($('filterMax').value):Infinity,loc=$('filterLocation').value.trim().toLowerCase();
-    const fresh=cfg.properties.filter(p=>p.status==='baru'&&Number(p.price)>=min&&Number(p.price)<=max&&String(p.location).toLowerCase().includes(loc));
-    const sold=cfg.properties.filter(p=>p.status==='terjual');
-    $('newPropertyGrid').innerHTML=fresh.length?fresh.map(card).join(''):'<div class="property-empty">Belum ada property yang sesuai dengan filter harga atau lokasi.</div>';
-    $('soldPropertyGrid').innerHTML=sold.length?sold.map(card).join(''):'<div class="property-empty">Belum ada data property terjual.</div>';
-  }
   function calculate(){
     const price=Math.max(0,digits($('simPrice').value)),dp=Math.max(0,digits($('simDp').value)),principal=Math.max(0,price-dp),rate=Math.max(0,Number($('simRate').value)||0)/1200,months=Math.max(1,Number($('simYears').value)||1)*12;
     const payment=rate===0?principal/months:principal*rate/(1-Math.pow(1+rate,-months));
@@ -1121,11 +1122,10 @@ footer{padding:28px 32px;background:#0b1c32;color:#c5cdd8;font-size:10px}.footer
   });
 
   (async()=>{
-    await migrateLegacyPhotos();
-    await renderProperties();
-    await renderAdminPropertyList();
-    setSimulator();
-  })();  renderProperties();setSimulator();
+  await migrateLegacyPhotos();
+  await renderProperties();
+  await renderAdminPropertyList();
+  setSimulator();
 })();
 </script>
 
