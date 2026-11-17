@@ -95,7 +95,60 @@ footer{padding:28px 32px;background:#0b1c32;color:#c5cdd8;font-size:10px}.footer
 .property-thumb:focus,.property-thumb:hover{border-color:#0878ed}
 .property-card .property-main-image{width:100%;height:190px;object-fit:cover;display:block}
 @media(max-width:650px){.admin-property-form{grid-template-columns:1fr}.admin-property-form .full{grid-column:1}.photo-preview-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.admin-property-row{align-items:flex-start;flex-wrap:wrap}.admin-property-row-info{min-width:calc(100% - 85px)}.admin-property-row-actions{width:100%;padding-left:77px}}
-</style>
+/* DETAIL PROPERTI DAN GALERI FOTO */
+.property-card{cursor:pointer;transition:transform .2s,box-shadow .2s}
+.property-card:hover{transform:translateY(-3px);box-shadow:0 14px 34px #10274620}
+.property-card:focus-visible{outline:3px solid var(--blue);outline-offset:3px}
+.property-card-image-wrap{position:relative}
+.property-card .property-card-cover{width:100%;height:210px;object-fit:cover;display:block}
+.property-photo-count{position:absolute;right:12px;bottom:12px;padding:7px 10px;border-radius:20px;background:#102746dc;color:#fff;font:700 11px Arial}
+.property-card-action{display:flex;justify-content:space-between;margin-top:16px;padding-top:12px;border-top:1px solid #e6eaf0;color:#0878ed;font:700 12px Arial}
+
+.property-detail-overlay{position:fixed;inset:0;z-index:10000;display:none;align-items:center;justify-content:center;padding:18px;background:#061426d9}
+.property-detail-overlay.open{display:flex}
+.property-detail-dialog{width:min(1120px,100%);max-height:94vh;overflow:auto;background:#fff;color:#102746;border-radius:16px;box-shadow:0 25px 90px #0008}
+.property-detail-top{position:sticky;top:0;z-index:3;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:15px 20px;background:#102746;color:#fff}
+.property-detail-top strong{font:700 13px Arial;letter-spacing:.04em}
+.property-detail-close{border:0;border-radius:8px;padding:9px 12px;background:#ffffff20;color:#fff;cursor:pointer}
+.property-detail-layout{display:grid;grid-template-columns:1.15fr .85fr;gap:26px;padding:22px}
+
+.property-detail-main{position:relative;display:grid;place-items:center;min-height:330px;overflow:hidden;border-radius:12px;background:#edf1f6}
+.property-detail-main img{width:100%;height:460px;object-fit:contain;display:block}
+.property-detail-empty{padding:40px;text-align:center;color:#65748a;font:13px Arial}
+.property-detail-nav{position:absolute;top:50%;transform:translateY(-50%);width:40px;height:40px;border:0;border-radius:50%;background:#102746d9;color:#fff;font-size:24px;cursor:pointer}
+.property-detail-nav.prev{left:12px}
+.property-detail-nav.next{right:12px}
+.property-detail-counter{position:absolute;right:12px;bottom:12px;padding:7px 10px;border-radius:20px;background:#102746d9;color:#fff;font:700 11px Arial}
+
+.property-detail-thumbs{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin-top:10px}
+.property-detail-thumb{padding:0;aspect-ratio:1.25;overflow:hidden;border:2px solid transparent;border-radius:8px;background:#edf1f6;cursor:pointer}
+.property-detail-thumb.active{border-color:#0878ed}
+.property-detail-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+
+.property-detail-info{min-width:0}
+.property-detail-status{display:inline-block;padding:6px 9px;border-radius:20px;background:#e8f2ff;color:#0866d9;font:800 10px Arial;letter-spacing:.08em}
+.property-detail-info h2{margin:12px 0 8px;font:400 clamp(28px,4vw,39px)/1.12 Georgia,serif}
+.property-detail-price{margin:0 0 9px;color:#ad8138;font:800 24px Arial}
+.property-detail-location{margin:0 0 18px;color:#65748a;font:13px/1.6 Arial}
+.property-detail-facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:0 0 20px}
+.property-detail-fact{padding:12px;border:1px solid #e3e8ef;border-radius:9px;background:#f8fafc}
+.property-detail-fact span{display:block;color:#718096;font:11px Arial}
+.property-detail-fact strong{display:block;margin-top:5px;color:#172d49;font:700 14px Arial}
+.property-detail-section{padding-top:15px;margin-top:15px;border-top:1px solid #e6eaf0}
+.property-detail-section h3{margin:0 0 8px;color:#17385e;font:700 13px Arial}
+.property-detail-section p{margin:0;color:#536174;font:13px/1.8 Arial;white-space:pre-line;overflow-wrap:anywhere}
+.property-detail-whatsapp{display:block;margin-top:22px;padding:14px 16px;border-radius:9px;background:#0878ed;color:#fff;text-align:center;font:700 12px Arial}
+
+@media(max-width:760px){
+ .property-detail-overlay{padding:8px;align-items:flex-start}
+ .property-detail-dialog{max-height:96vh;border-radius:12px}
+ .property-detail-layout{grid-template-columns:1fr;gap:18px;padding:13px}
+ .property-detail-main{min-height:230px}
+ .property-detail-main img{height:290px}
+ .property-detail-thumbs{grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+ .property-detail-facts{gap:7px}
+ .property-detail-top{padding:13px 15px}
+}</style>
 
 </head>
 <body>
@@ -191,7 +244,63 @@ footer{padding:28px 32px;background:#0b1c32;color:#c5cdd8;font-size:10px}.footer
 <section class="contact" id="contact"><div class="contact-inner"><div><div class="kicker" style="color:#e0c27f">Mulai percakapan</div><h2 id="contactTitle">Punya rencana membangun?</h2><p id="contactDescription">Ceritakan kebutuhan hunian Anda. Kami siap mendengarkan dan membantu membahas langkah berikutnya.</p></div><a class="btn" id="contactWhatsapp" href="https://wa.me/6280000000000?text=Halo%20RANCANG%20RUMAHKU%2C%20saya%20ingin%20konsultasi." target="_blank" rel="noopener">Hubungi via WhatsApp ↗</a></div></section>
 <footer><div class="footer-inner"><span>© 2026 RANCANG RUMAHKU</span><span>Residential Design & Build</span><span>Website company profile — draft awal</span></div></footer>
 <a class="whatsapp" href="https://wa.me/6280000000000?text=Halo%20RANCANG%20RUMAHKU%2C%20saya%20ingin%20konsultasi." target="_blank" rel="noopener">WhatsApp ↗</a>
+<div class="property-detail-overlay" id="propertyDetailOverlay" aria-hidden="true">
+  <section class="property-detail-dialog" role="dialog" aria-modal="true" aria-labelledby="detailPropertyName">
 
+    <header class="property-detail-top">
+      <strong>DETAIL PROPERTI</strong>
+      <button class="property-detail-close" id="detailPropertyClose" type="button">Tutup ✕</button>
+    </header>
+
+    <div class="property-detail-layout">
+
+      <div class="property-detail-gallery">
+        <div class="property-detail-main">
+          <img id="detailMainPhoto" alt="Foto properti">
+
+          <div class="property-detail-empty" id="detailPhotoEmpty" hidden>
+            Foto belum tersedia.
+          </div>
+
+          <button class="property-detail-nav prev" id="detailPrevPhoto" type="button">‹</button>
+          <button class="property-detail-nav next" id="detailNextPhoto" type="button">›</button>
+
+          <span class="property-detail-counter" id="detailPhotoCounter">0 / 0</span>
+        </div>
+
+        <div class="property-detail-thumbs" id="detailPhotoThumbs"></div>
+      </div>
+
+      <div class="property-detail-info">
+
+        <span class="property-detail-status" id="detailPropertyStatus"></span>
+
+        <h2 id="detailPropertyName"></h2>
+
+        <p class="property-detail-price" id="detailPropertyPrice"></p>
+
+        <p class="property-detail-location" id="detailPropertyLocation"></p>
+
+        <div class="property-detail-facts" id="detailPropertyFacts"></div>
+
+        <section class="property-detail-section" id="detailDescriptionSection">
+          <h3>Deskripsi Rumah</h3>
+          <p id="detailPropertyDescription"></p>
+        </section>
+
+        <section class="property-detail-section" id="detailFacilitiesSection">
+          <h3>Fasilitas & Informasi Tambahan</h3>
+          <p id="detailPropertyFacilities"></p>
+        </section>
+
+        <a class="property-detail-whatsapp" id="detailPropertyWhatsapp" href="#" target="_blank" rel="noopener">
+          Tanyakan properti ini via WhatsApp ↗
+        </a>
+
+      </div>
+    </div>
+  </section>
+</div>
 <button class="admin-launch" id="adminLaunch" type="button">⚙ Admin</button>
 <div class="admin-login-overlay" id="adminLoginOverlay" aria-hidden="true">
   <form class="admin-login-card" id="adminLoginForm">
@@ -587,21 +696,259 @@ footer{padding:28px 32px;background:#0b1c32;color:#c5cdd8;font-size:10px}.footer
     }
   }
 
-  async function card(p){
-    const photos=await Promise.all(getPropertyPhotos(p).map(getPhotoUrl));
-    const mainPhoto=photos.find(Boolean)||'';
-    const thumbs=photos.filter(Boolean).length>1?`<div class="property-thumbs">${photos.filter(Boolean).slice(0,MAX_PHOTOS).map(src=>`<button class="property-thumb" type="button" data-photo-src="${safe(src)}" aria-label="Lihat foto lain"><img src="${safe(src)}" alt="Foto ${safe(p.name)}"></button>`).join('')}</div>`:'';
-    const details=[p.bedrooms?`${safe(p.bedrooms)} kamar tidur`:'',p.bathrooms?`${safe(p.bathrooms)} kamar mandi`:'',p.floors?`${safe(p.floors)} lantai`:'' ].filter(Boolean);
-    return `<article class="property-card"><img class="property-main-image" src="${safe(mainPhoto)}" alt="${safe(p.name)}" onerror="this.style.display='none'">${thumbs}<div class="property-body"><div class="property-status">${p.status==='terjual'?'TERJUAL':'TERSEDIA'}</div><h3>${safe(p.name)}</h3><div class="property-price">${rupiah(p.price)}</div><div class="property-meta"><span>Luas tanah ${safe(p.land||0)} m²</span><span>Luas bangunan ${safe(p.building||0)} m²</span>${details.map(d=>`<span>${d}</span>`).join('')}</div><div class="property-location">⌖ ${safe(p.location||'')}</div>${p.description?`<p class="property-card-description">${safe(p.description)}</p>`:''}${p.facilities?`<p class="property-card-description"><strong>Fasilitas:</strong> ${safe(p.facilities)}</p>`:''}</div></article>`;
+    async function card(p){
+    const photos=getPropertyPhotos(p);
+    const mainPhoto=await getPhotoUrl(photos[0]||'');
+    const propertyIndex=cfg.properties.indexOf(p);
+
+    const quickFacts=[
+      p.land?`Tanah ${safe(p.land)} m²`:'',
+      p.building?`Bangunan ${safe(p.building)} m²`:'',
+      p.bedrooms?`${safe(p.bedrooms)} kamar tidur`:'',
+      p.bathrooms?`${safe(p.bathrooms)} kamar mandi`:''
+    ].filter(Boolean);
+
+    return `<article class="property-card"
+      data-property-index="${propertyIndex}"
+      role="button"
+      tabindex="0"
+      aria-label="Lihat detail ${safe(p.name)}">
+
+      <div class="property-card-image-wrap">
+        <img class="property-card-cover"
+          src="${safe(mainPhoto)}"
+          alt="${safe(p.name)}"
+          onerror="this.style.display='none'">
+
+        ${photos.length>1?`<span class="property-photo-count">▧ ${photos.length} foto</span>`:''}
+      </div>
+
+      <div class="property-body">
+        <div class="property-status">${p.status==='terjual'?'TERJUAL':'TERSEDIA'}</div>
+
+        <h3>${safe(p.name)}</h3>
+
+        <div class="property-price">${rupiah(p.price)}</div>
+
+        <div class="property-meta">
+          ${quickFacts.map(f=>`<span>${f}</span>`).join('')}
+        </div>
+
+        <div class="property-location">⌖ ${safe(p.location||'')}</div>
+
+        <div class="property-card-action">
+          <span>Lihat detail rumah</span>
+          <span>→</span>
+        </div>
+      </div>
+    </article>`;
   }
 
-  function attachGalleryEvents(){
-    document.querySelectorAll('.property-thumb').forEach(button=>button.addEventListener('click',()=>{
-      const parent=button.closest('.property-card');
-      const main=parent&&parent.querySelector('.property-main-image');
-      if(main)main.src=button.dataset.photoSrc;
-    }));
+  let detailPhotoUrls=[];
+  let detailPhotoIndex=0;
+
+  function renderDetailPhoto(){
+    const image=$('detailMainPhoto');
+    const total=detailPhotoUrls.length;
+    const src=detailPhotoUrls[detailPhotoIndex]||'';
+
+    image.hidden=!src;
+    $('detailPhotoEmpty').hidden=!!src;
+
+    if(src)image.src=src;
+
+    $('detailPhotoCounter').textContent=total?
+      `${detailPhotoIndex+1} / ${total}`:'0 / 0';
+
+    const multiple=total>1;
+
+    $('detailPrevPhoto').hidden=!multiple;
+    $('detailNextPhoto').hidden=!multiple;
+
+    $('detailPhotoThumbs').innerHTML=detailPhotoUrls.map((url,i)=>`
+      <button class="property-detail-thumb ${i===detailPhotoIndex?'active':''}"
+        type="button"
+        data-detail-photo="${i}"
+        aria-label="Tampilkan foto ${i+1}">
+        <img src="${safe(url)}" alt="Foto ${i+1}">
+      </button>
+    `).join('');
   }
+
+  function showDetailPhoto(index){
+    if(!detailPhotoUrls.length)return;
+
+    detailPhotoIndex=(index+detailPhotoUrls.length)%detailPhotoUrls.length;
+
+    renderDetailPhoto();
+  }
+
+  async function openPropertyDetail(index){
+    const p=cfg.properties[index];
+
+    if(!p)return;
+
+    const refs=getPropertyPhotos(p);
+
+    detailPhotoUrls=(await Promise.all(refs.map(async ref=>{
+      try{
+        return await getPhotoUrl(ref);
+      }catch(error){
+        console.warn('Foto detail tidak dapat dibuka:',error);
+        return '';
+      }
+    }))).filter(Boolean);
+
+    detailPhotoIndex=0;
+
+    $('detailPropertyStatus').textContent=
+      p.status==='terjual'?'SUDAH TERJUAL':'TERSEDIA';
+
+    $('detailPropertyName').textContent=p.name||'Properti';
+    $('detailPropertyPrice').textContent=rupiah(p.price);
+
+    $('detailPropertyLocation').textContent=
+      '⌖ '+(p.location||'Lokasi belum diisi');
+
+    const facts=[
+      ['Luas tanah',p.land?`${p.land} m²`:'Belum diisi'],
+      ['Luas bangunan',p.building?`${p.building} m²`:'Belum diisi'],
+      ['Kamar tidur',p.bedrooms||'Belum diisi'],
+      ['Kamar mandi',p.bathrooms||'Belum diisi'],
+      ['Jumlah lantai',p.floors||'Belum diisi']
+    ];
+
+    $('detailPropertyFacts').innerHTML=facts.map(([label,value])=>`
+      <div class="property-detail-fact">
+        <span>${safe(label)}</span>
+        <strong>${safe(value)}</strong>
+      </div>
+    `).join('');
+
+    $('detailPropertyDescription').textContent=
+      p.description||'Belum ada deskripsi untuk properti ini.';
+
+    $('detailPropertyFacilities').textContent=
+      p.facilities||'Belum ada informasi fasilitas tambahan.';
+
+    $('detailDescriptionSection').hidden=!p.description;
+    $('detailFacilitiesSection').hidden=!p.facilities;
+
+    let siteData={};
+
+    try{
+      siteData=JSON.parse(
+        localStorage.getItem('rancangRumahkuAdminV1')||'{}'
+      );
+    }catch(error){}
+
+    const waNumber=String(
+      siteData.whatsapp||'6280000000000'
+    ).replace(/\D/g,'');
+
+    const waMessage=
+      `Halo RANCANG RUMAHKU, saya tertarik dengan ${p.name}. Mohon informasi lebih lanjut mengenai properti ini.`;
+
+    $('detailPropertyWhatsapp').href=
+      `https://wa.me/${waNumber}?text=${encodeURIComponent(waMessage)}`;
+
+    renderDetailPhoto();
+
+    $('propertyDetailOverlay').classList.add('open');
+    $('propertyDetailOverlay').setAttribute('aria-hidden','false');
+
+    document.body.style.overflow='hidden';
+  }
+
+  function closePropertyDetail(){
+    $('propertyDetailOverlay').classList.remove('open');
+    $('propertyDetailOverlay').setAttribute('aria-hidden','true');
+
+    document.body.style.overflow='';
+  }
+
+  function attachPropertyDetailEvents(){
+
+    ['newPropertyGrid','soldPropertyGrid'].forEach(id=>{
+
+      const grid=$(id);
+
+      grid.addEventListener('click',event=>{
+
+        const propertyCard=event.target.closest('.property-card');
+
+        if(!propertyCard||!grid.contains(propertyCard))return;
+
+        openPropertyDetail(
+          Number(propertyCard.dataset.propertyIndex)
+        );
+
+      });
+
+      grid.addEventListener('keydown',event=>{
+
+        if(event.key!=='Enter'&&event.key!==' ')return;
+
+        const propertyCard=event.target.closest('.property-card');
+
+        if(!propertyCard||!grid.contains(propertyCard))return;
+
+        event.preventDefault();
+
+        openPropertyDetail(
+          Number(propertyCard.dataset.propertyIndex)
+        );
+
+      });
+
+    });
+
+  }
+
+  attachPropertyDetailEvents();
+
+  $('detailPropertyClose').addEventListener('click',closePropertyDetail);
+
+  $('propertyDetailOverlay').addEventListener('click',event=>{
+    if(event.target===$('propertyDetailOverlay')){
+      closePropertyDetail();
+    }
+  });
+
+  $('detailPrevPhoto').addEventListener('click',()=>{
+    showDetailPhoto(detailPhotoIndex-1);
+  });
+
+  $('detailNextPhoto').addEventListener('click',()=>{
+    showDetailPhoto(detailPhotoIndex+1);
+  });
+
+  $('detailPhotoThumbs').addEventListener('click',event=>{
+    const thumb=event.target.closest('[data-detail-photo]');
+
+    if(thumb){
+      showDetailPhoto(Number(thumb.dataset.detailPhoto));
+    }
+  });
+
+  document.addEventListener('keydown',event=>{
+
+    if(event.key==='Escape'&&
+      $('propertyDetailOverlay').classList.contains('open')){
+      closePropertyDetail();
+    }
+
+    if(!$('propertyDetailOverlay').classList.contains('open'))return;
+
+    if(event.key==='ArrowLeft'){
+      showDetailPhoto(detailPhotoIndex-1);
+    }
+
+    if(event.key==='ArrowRight'){
+      showDetailPhoto(detailPhotoIndex+1);
+    }
+
+  });
 
   async function renderProperties(){
     const min=digits($('filterMin').value)||0,max=$('filterMax').value.trim()?digits($('filterMax').value):Infinity,loc=$('filterLocation').value.trim().toLowerCase();
@@ -610,7 +957,6 @@ footer{padding:28px 32px;background:#0b1c32;color:#c5cdd8;font-size:10px}.footer
     const [freshCards,soldCards]=await Promise.all([Promise.all(fresh.map(card)),Promise.all(sold.map(card))]);
     $('newPropertyGrid').innerHTML=freshCards.length?freshCards.join(''):'<div class="property-empty">Belum ada property yang sesuai dengan filter harga atau lokasi.</div>';
     $('soldPropertyGrid').innerHTML=soldCards.length?soldCards.join(''):'<div class="property-empty">Belum ada data property terjual.</div>';
-    attachGalleryEvents();
   }
 
   function compressPhoto(file){
@@ -716,7 +1062,7 @@ footer{padding:28px 32px;background:#0b1c32;color:#c5cdd8;font-size:10px}.footer
     if(persistProperties(next)){resetPropertyForm();alert('Data properti dan foto tersimpan di browser/perangkat ini. Untuk menampilkannya ke semua pengunjung, lanjutkan integrasi Supabase Storage.');}
   });
 
-  $('propertyCancelBtn').addEventListener('click',resetPropertyForm);{
+  $('propertyCancelBtn').addEventListener('click',resetPropertyForm);
     const min=digits($('filterMin').value)||0,max=$('filterMax').value.trim()?digits($('filterMax').value):Infinity,loc=$('filterLocation').value.trim().toLowerCase();
     const fresh=cfg.properties.filter(p=>p.status==='baru'&&Number(p.price)>=min&&Number(p.price)<=max&&String(p.location).toLowerCase().includes(loc));
     const sold=cfg.properties.filter(p=>p.status==='terjual');
