@@ -408,22 +408,38 @@ footer{padding:28px 32px;background:#0b1c32;color:#c5cdd8;font-size:10px}.footer
   let cfg;
   try{cfg={...defaults,...JSON.parse(localStorage.getItem(featureKey)||'{}')};}catch(e){cfg={...defaults};}
   const $=id=>document.getElementById(id);
-  const digits = value => Number(String(value ?? '').replace(/\\D/g, '')) || 0;
+  const digits = value => Number(String(value ?? '').replace(/\D/g, '')) || 0;
   const formatMoney = value => digits(value).toLocaleString('id-ID');
   const rupiah=n=>'Rp '+Math.max(0,Number(n)||0).toLocaleString('id-ID');
+
   function bindMoneyInput(el){
     if(!el) return;
+
     el.addEventListener('input',()=>{
-      const before=el.value;
-      const pos=el.selectionStart ?? before.length;
-      const digitsBefore=(before.slice(0,pos).match(/\\d/g)||[]).length;
-      el.value=formatMoney(before);
-      let next=0, seen=0;
-      while(next<el.value.length && seen<digitsBefore){if(/\\d/.test(el.value[next]))seen++;next++;}
-      try{el.setSelectionRange(next,next);}catch(e){}
+      const before = el.value;
+      const pos = el.selectionStart ?? before.length;
+      const digitsBefore = (before.slice(0, pos).match(/\d/g) || []).length;
+
+      const formatted = formatMoney(before);
+      el.value = formatted;
+
+      let next = 0;
+      let seen = 0;
+      while(next < formatted.length && seen < digitsBefore){
+        if(/\d/.test(formatted[next])) seen++;
+        next++;
+      }
+
+      try{
+        el.setSelectionRange(next, next);
+      }catch(e){}
     });
-    el.addEventListener('blur',()=>{if(el.value)el.value=formatMoney(el.value);});
+
+    el.addEventListener('blur',()=>{
+      if(el.value) el.value = formatMoney(el.value);
+    });
   }
+
   const safe=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   function card(p){
     return `<article class="property-card"><img src="${safe(p.image||'')}" alt="${safe(p.name)}" onerror="this.style.display='none'"><div class="property-body"><div class="property-status">${p.status==='terjual'?'TERJUAL':'TERSEDIA'}</div><h3>${safe(p.name)}</h3><div class="property-price">${rupiah(p.price)}</div><div class="property-meta"><span>Luas tanah ${safe(p.land)} m²</span><span>Luas bangunan ${safe(p.building)} m²</span></div><div class="property-location">⌖ ${safe(p.location)}</div></div></article>`;
